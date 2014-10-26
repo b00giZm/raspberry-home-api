@@ -63,7 +63,7 @@ var all = module.exports.all= function() {
 };
 
 var byId = module.exports.byId = function(deviceId) {
-  return devices[key] || null;
+  return devices[deviceId] || null;
 };
 
 var nativebyId = module.exports.nativebyId = function(deviceId) {
