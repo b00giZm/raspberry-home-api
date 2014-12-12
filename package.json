@@ -2,7 +2,7 @@
   "name": "raspberry-home-api",
   "version": "0.1.0",
   "scripts": {
-    "start": "nodemon -L app/bin/www"
+    "start": "bin/www"
   },
   "dependencies": {
     "express": "~4.9.0",
