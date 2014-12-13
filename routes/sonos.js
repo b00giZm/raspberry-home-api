@@ -14,29 +14,23 @@ router.get('/', function(req, res, next) {
 router.get('/:id', function(req, res, next) {
   var deviceInfo = sonos.byId(req.params.id);
   if (!deviceInfo) {
-    return res.json(404, {
-      error: 'No device found for id ' + req.params.id
-    });
+    return res.status(404).json({ error: 'No device found for id ' + req.params.id });
   }
 
   return res.json(deviceInfo);
 });
 
 router.get('/:id/current_track', function(req, res, next) {
-  var deviceInfo = sonos.byId(req.params.id);
-  if (!deviceInfo) {
-    return res.json(404, {
-      error: 'No device found for id ' + req.params.id
-    });
+  var device = sonos.nativeById(req.params.id);
+  if (!device) {
+    return res.status(404).json({ error: 'No device found for id ' + req.params.id });
   }
 
-  var sonosDevice = new Sonos(deviceInfo.ipAddress, deviceInfo.port);
-  sonosDevice.currentTrack(function(err, trackInfo) {
+  device.currentTrack(function(err, trackInfo) {
     if (err) {
       console.log(err);
-      return res.json(500, {
-        error: 'Internal error'
-      });
+      
+      return res.status(500).json({ error: 'Internal error' });
     }
 
     return res.json(trackInfo);
