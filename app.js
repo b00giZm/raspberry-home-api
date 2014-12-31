@@ -25,7 +25,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(webhook(function(json, done) {
   console.log(json);
-
   done();
 }));
 
