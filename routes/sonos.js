@@ -11,6 +11,24 @@ router.get('/', function(req, res, next) {
   return res.json(sonos.all());
 });
 
+router.post('/pause', function(req, res, next) {
+  sonos.pauseAll().then(function() {
+    return res.end();
+  });
+});
+
+router.post('/stop', function(req, res, next) {
+  sonos.stopAll().then(function() {
+    return res.end();
+  });
+});
+
+router.post('/resume', function(req, res, next) {
+  sonos.resumeAll().then(function() {
+    return res.end();
+  });
+});
+
 router.get('/:id', function(req, res, next) {
   var deviceInfo = sonos.byId(req.params.id);
   if (!deviceInfo) {
@@ -29,7 +47,7 @@ router.get('/:id/current_track', function(req, res, next) {
   device.currentTrack(function(err, trackInfo) {
     if (err) {
       console.log(err);
-      
+
       return res.status(500).json({ error: 'Internal error' });
     }
 

@@ -6,8 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
 var webhook      = require('express-ifttt-webhook');
 
-var routes       = require('./routes/index');
-var sonos        = require('./routes/sonos');
+var sonos        = require('./lib/sonos');
 
 var app = express();
 
@@ -24,12 +23,22 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(webhook(function(json, done) {
-  console.log(json);
+  console.log(json.description.event);
+
+  if (json.description.event == 'exited') {
+    return sonos
+      .pauseAll()
+      .then(function() {
+        done();
+      })
+    ;
+  }
+
   done();
 }));
 
-app.use('/', routes);
-app.use('/sonos', sonos);
+app.use('/', require('./routes/index'));
+app.use('/sonos', require('./routes/sonos'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
