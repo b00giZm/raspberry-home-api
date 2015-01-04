@@ -38,6 +38,39 @@ router.get('/:id', function(req, res, next) {
   return res.json(deviceInfo);
 });
 
+router.post('/:id/pause', function(req, res, next) {
+  var device = sonos.nativeById(req.params.id);
+  if (!device) {
+    return res.status(404).json({ error: 'No device found for id ' + req.params.id });
+  }
+
+  device.pause(function(err, result) {
+    return res.end();
+  });
+});
+
+router.post('/:id/stop', function(req, res, next) {
+  var device = sonos.nativeById(req.params.id);
+  if (!device) {
+    return res.status(404).json({ error: 'No device found for id ' + req.params.id });
+  }
+
+  device.stop(function(err, result) {
+    return res.end();
+  });
+});
+
+router.post('/:id/resume', function(req, res, next) {
+  var device = sonos.nativeById(req.params.id);
+  if (!device) {
+    return res.status(404).json({ error: 'No device found for id ' + req.params.id });
+  }
+
+  device.play(function(err, result) {
+    return res.end();
+  });
+});
+
 router.get('/:id/current_track', function(req, res, next) {
   var device = sonos.nativeById(req.params.id);
   if (!device) {
