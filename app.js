@@ -22,19 +22,21 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(webhook(function(json, done) {
-  console.log(json.description.event);
+app.use(webhook({
+  geo: function(json, done) {
+    console.log('cat:geo triggered with event:', json.description.event);
 
-  if (json.description.event == 'exited') {
-    return sonos
-      .pauseAll()
-      .then(function() {
-        done();
-      })
-    ;
+    if (json.description.event == 'exited') {
+      return sonos
+        .pauseAll()
+        .then(function() {
+          done();
+        })
+      ;
+    }
+
+    done();
   }
-
-  done();
 }));
 
 app.use('/', require('./routes/index'));
